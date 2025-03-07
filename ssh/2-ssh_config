@@ -1,0 +1,13 @@
+# Ensure the config file exists
+mkdir -p ~/.ssh
+touch ~/.ssh/config
+chmod 600 ~/.ssh/config
+
+# Add the configuration
+echo "Host myserver
+    HostName 44.223.69.233
+    User root
+    IdentityFile ~/.ssh/school
+    PasswordAuthentication no
+" >> ~/.ssh/config
+
