@@ -1,30 +1,20 @@
 #!/usr/bin/env bash
-# Update package lists
-apt-get update -y
+# This script installs Nginx, allows HTTP traffic, and configures the default page.
+
+# Update package list
+sudo apt-get update -y
 
 # Install Nginx
-apt-get install -y nginx
+sudo apt-get install nginx -y
+
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx HTTP'
 
 # Ensure Nginx is running
-service nginx start
+sudo service nginx start
 
-# Create a custom HTML page containing "Holberton School"
-echo 'Holberton School for the win!' > /var/www/html/index.html
+# Create the expected content
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Restart Nginx without using systemctl
-/etc/init.d/nginx restart
-
-# Ensure Nginx listens on port 80
-if ! grep -q "listen 80;" /etc/nginx/sites-available/default; then
-    echo "Error: Nginx is not properly configured to listen on port 80."
-    exit 1
-fi
-
-# Confirm the setup by making a GET request to localhost
-curl -s localhost | grep "Holberton School"
-if [ $? -eq 0 ]; then
-    echo "Nginx is serving the expected content. Setup successful."
-else
-    echo "Error: Nginx is not serving the expected content."
-    exit 1
-fi
+# Reload Nginx to apply changes
+sudo service nginx reload
